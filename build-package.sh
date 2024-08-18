@@ -72,6 +72,10 @@ source "$TERMUX_SCRIPTDIR/scripts/build/termux_error_exit.sh"
 # shellcheck source=scripts/build/termux_download.sh
 source "$TERMUX_SCRIPTDIR/scripts/build/termux_download.sh"
 
+# Setup PGP keys for verifying integrity of dependencies.
+# shellcheck source=scripts/build/termux_step_setup_gpg_keys.sh
+source "$TERMUX_SCRIPTDIR/scripts/build/termux_step_setup_gpg_keys.sh"
+
 # Installing packages if necessary for the full operation of CGCT.
 # shellcheck source=scripts/build/termux_step_setup_cgct_environment.sh
 source "$TERMUX_SCRIPTDIR/scripts/build/termux_step_setup_cgct_environment.sh"
@@ -539,21 +543,8 @@ if [ -n "${TERMUX_PACKAGE_LIBRARY-}" ]; then
 	esac
 fi
 
-if [ "${TERMUX_INSTALL_DEPS-false}" = "true" ] || [ "${TERMUX_PACKAGE_LIBRARY-bionic}" = "glibc" ]; then
-	# Setup PGP keys for verifying integrity of dependencies.
-	# Keys are obtained from our keyring package.
-	gpg --list-keys 2C7F29AE97891F6419A9E2CDB0076E490B71616B > /dev/null 2>&1 || {
-		gpg --import "$TERMUX_SCRIPTDIR/packages/termux-keyring/grimler.gpg"
-		gpg --no-tty --command-file <(echo -e "trust\n5\ny")  --edit-key 2C7F29AE97891F6419A9E2CDB0076E490B71616B
-	}
-	gpg --list-keys CC72CF8BA7DBFA0182877D045A897D96E57CF20C > /dev/null 2>&1 || {
-		gpg --import "$TERMUX_SCRIPTDIR/packages/termux-keyring/termux-autobuilds.gpg"
-		gpg --no-tty --command-file <(echo -e "trust\n5\ny")  --edit-key CC72CF8BA7DBFA0182877D045A897D96E57CF20C
-	}
-	gpg --list-keys 998DE27318E867EA976BA877389CEED64573DFCA > /dev/null 2>&1 || {
-		gpg --import "$TERMUX_SCRIPTDIR/packages/termux-keyring/termux-pacman.gpg"
-		gpg --no-tty --command-file <(echo -e "trust\n5\ny")  --edit-key 998DE27318E867EA976BA877389CEED64573DFCA
-	}
+if [ "$TERMUX_REPO_PACKAGE" = "$TERMUX_APP_PACKAGE" ]; then
+	termux_step_setup_gpg_keys
 fi
 
 for ((i=0; i<${#PACKAGE_LIST[@]}; i++)); do

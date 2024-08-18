@@ -15,7 +15,7 @@ termux_step_get_dependencies() {
 			echo "A circular dependency was found on '$PKG', the old version of the package will be installed to resolve the conflict"
 			cyclic_dependence=true
 			if [ "$TERMUX_INSTALL_DEPS" = false ]; then
-				termux_download_repo_file
+				TERMUX_INSTALL_DEPS=true termux_download_repo_file
 			fi
 		fi
 

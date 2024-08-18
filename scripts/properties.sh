@@ -3,6 +3,8 @@
 # coreutils and are clearly not a default part of most Linux installations,
 # or sourcing any other script in our build directories.
 
+: "${TERMUX_SCRIPTDIR:="$(dirname ${BASH_SOURCE[0]%/*})"}"
+
 TERMUX_SDK_REVISION=9123335
 TERMUX_ANDROID_BUILD_TOOLS_VERSION=33.0.1
 # when changing the above:
@@ -50,6 +52,15 @@ export CGCT_DIR="/data/data/com.termux/cgct"
 # This must only equal TERMUX_APP_PACKAGE if using custom repo that
 # has packages that were built with same package name.
 TERMUX_REPO_PACKAGE="com.termux"
+
+# Paths to gpg key files that will be configured
+# to verify installed files from repos (service).
+# Keys are obtained from our keyring package.
+TERMUX_REPO_GPG_KEYS="
+$TERMUX_SCRIPTDIR/packages/termux-keyring/grimler.gpg
+$TERMUX_SCRIPTDIR/packages/termux-keyring/termux-autobuilds.gpg
+$TERMUX_SCRIPTDIR/packages/termux-keyring/termux-pacman.gpg
+"
 
 # Termux repo urls.
 TERMUX_REPO_URL=()
