@@ -37,11 +37,3 @@ diff -uNr gl4es/src/glx/glx.c gl4es.mod/src/glx/glx.c
  
      attr[cur++] = EGL_RENDERABLE_TYPE;
      attr[cur++] = (hardext.esversion==1)?EGL_OPENGL_ES_BIT:EGL_OPENGL_ES2_BIT;
-
-@@ -1390,7 +1390,7 @@
- 
-     // Se `drawable` for um GLXDrawable, você precisa mapear isso para um EGLNativeWindowType
-     EGLNativeWindowType native_window = (EGLNativeWindowType)drawable; // Ajuste aqui se necessário
-     
--    eglSurf = context->eglSurface = egl_eglCreateWindowSurface(eglDisplay, context->eglConfigs[0], drawable, attrib_list);
-+    eglSurf = context->eglSurface = egl_eglCreateWindowSurface(eglDisplay, context->eglConfigs[0], native_window, attrib_list);
