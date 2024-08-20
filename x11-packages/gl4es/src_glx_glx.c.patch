@@ -1,6 +1,6 @@
 diff -uNr gl4es/src/glx/glx.c gl4es.mod/src/glx/glx.c
 --- gl4es/src/glx/glx.c	2021-10-13 23:49:59.663443188 +0800
-+++ gl4es.mod/src/glx/glx.c	2021-10-13 23:48:57.699443233 +0800
++++ gl4es.mod/src/glx/glx.c	2024-08-20 00:00:00.000000000 +0000
 @@ -770,8 +770,11 @@
      }
  
@@ -38,8 +38,10 @@ diff -uNr gl4es/src/glx/glx.c gl4es.mod/src/glx/glx.c
      attr[cur++] = EGL_RENDERABLE_TYPE;
      attr[cur++] = (hardext.esversion==1)?EGL_OPENGL_ES_BIT:EGL_OPENGL_ES2_BIT;
 
-@@ -1391,8 +1391,11 @@
--        eglSurf = context->eglSurface = egl_eglCreateWindowSurface(eglDisplay, context->eglConfigs[0], drawable, attrib_list);
-+        // Assuming drawable should be cast to EGLNativeWindowType
-+        EGLNativeWindowType native_window = (EGLNativeWindowType)drawable; // Cast GLXDrawable to EGLNativeWindowType
-+        eglSurf = context->eglSurface = egl_eglCreateWindowSurface(eglDisplay, context->eglConfigs[0], native_window, attrib_list);
+@@ -1390,7 +1390,7 @@
+ 
+     // Se `drawable` for um GLXDrawable, você precisa mapear isso para um EGLNativeWindowType
+     EGLNativeWindowType native_window = (EGLNativeWindowType)drawable; // Ajuste aqui se necessário
+     
+-    eglSurf = context->eglSurface = egl_eglCreateWindowSurface(eglDisplay, context->eglConfigs[0], drawable, attrib_list);
++    eglSurf = context->eglSurface = egl_eglCreateWindowSurface(eglDisplay, context->eglConfigs[0], native_window, attrib_list);
