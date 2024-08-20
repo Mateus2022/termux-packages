@@ -40,5 +40,6 @@ diff -uNr gl4es/src/glx/glx.c gl4es.mod/src/glx/glx.c
 
 @@ -1391,8 +1391,11 @@
 -        eglSurf = context->eglSurface = egl_eglCreateWindowSurface(eglDisplay, context->eglConfigs[0], drawable, attrib_list);
-+        EGLNativeWindowType native_window = (EGLNativeWindowType)drawable; // Casting GLXDrawable to EGLNativeWindowType
++        // Assuming drawable should be cast to EGLNativeWindowType
++        EGLNativeWindowType native_window = (EGLNativeWindowType)drawable; // Cast GLXDrawable to EGLNativeWindowType
 +        eglSurf = context->eglSurface = egl_eglCreateWindowSurface(eglDisplay, context->eglConfigs[0], native_window, attrib_list);
