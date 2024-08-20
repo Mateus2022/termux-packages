@@ -1,34 +1,8 @@
-diff -uNr gl4es/src/glx/glx.c gl4es.mod/src/glx/glx.c
---- gl4es/src/glx/glx.c	2021-10-13 23:49:59.663443188 +0800
-+++ gl4es.mod/src/glx/glx.c	2024-08-20 00:00:00.000000000 +0000
-@@ -770,8 +770,11 @@
-     }
- 
- 	result = egl_eglChooseConfig(eglDisplay, configAttribs, fake->eglConfigs, 64, &fake->eglConfigsCount);
-+
-+#ifndef NO_GBM
-     if(fake->eglConfigsCount && globals4es.usegbm)
-         fake->eglconfigIdx = FindGBMConfig(eglDisplay, fake->eglConfigs, fake->eglConfigsCount);
-+#endif
- 
-     CheckEGLErrors();
-     if (result != EGL_TRUE || fake->eglConfigsCount == 0) {
-@@ -951,10 +954,12 @@
-         }
- 
-         result = egl_eglChooseConfig(eglDisplay, configAttribs, fake->eglConfigs, 64, &fake->eglConfigsCount);
-+
-+        fake->eglconfigIdx = 0;
-+#ifndef NO_GBM
-         if(fake->eglConfigsCount && globals4es.usegbm)
-             fake->eglconfigIdx = FindGBMConfig(eglDisplay, fake->eglConfigs, fake->eglConfigsCount);
--        else
--            fake->eglconfigIdx = 0;
-+#endif
- 
-         CheckEGLErrors();
-         if (result != EGL_TRUE || fake->eglConfigsCount == 0) {
-@@ -1819,7 +1824,7 @@
+diff --git a/src/glx/glx.c b/src/glx/glx.c
+index 0bcc438f..78a32136 100644
+--- a/src/glx/glx.c
++++ b/src/glx/glx.c
+@@ -1819,7 +1819,7 @@ GLXFBConfig *gl4es_glXChooseFBConfig(Display *display, int screen,
          attr[cur++] = EGL_STENCIL_SIZE;
          attr[cur++] = tmp;
      }
